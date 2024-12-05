@@ -37,7 +37,7 @@ let g:copilot_proxy_strict_ssl = v:false
 
 ## Editing files
 
-Open a file in your editor and start editing. You should see the traffic in the mitmproxy window once you start typing in the file. By default, Copilot will be active on startup and for more or less all file types, and send the content of the file to the server every time you type a character.
+Open a file in your editor and start editing. You should see the traffic in the mitmproxy window once you start typing in the file. By default, Copilot will be active on startup and for more or less all file types, and send the content of the file to the server every time you type a character. Check the lines with `HTTPS POST …ividual.githubcopilot.com /v1/engines/copilot-codex/completions` to see what is sent to the server.
 
 As seen in `api_reader.bad.py`, Copilot will send the content of the file to the server, which contains the API key. This is a bad practice, as the API key should not be shared with anyone. 
 
@@ -58,10 +58,91 @@ api_url = config['api_url']
 ```
 The YAML file is added to the `.gitignore` file to avoid commiting the API key to the git repo. If you were to edit the YAML file though, Copilot would still send the content to the server, as it does not respect the `.gitignore` file.
 
+## Suggestions
+
+There are a couple of things you can do to imporve the security when using Copilot.
+
+### Copilot disabled by default
+
+By having Copilot disabled until you need it, you can avoid sending any content to the server when you are not actively using it.
 
 
+#### Vim
 
+This can be done by adding the following line to your `~/.vimrc`:
 
+```vim
+autocmd VimEnter * Copilot disable
+```
+
+and enabling it when you need it with `:Copilot enable`. You can also bind this to a key combination, for example:
+
+```vim
+" function to toggle copilot 
+let g:copilot_enabled = 0 
+function! ToggleCopilot()
+    if exists("g:copilot_enabled") && g:copilot_enabled
+        let g:copilot_enabled = 0 
+        echo "Copilot disabled"
+    else                                                                                      
+        let g:copilot_enabled = 1 
+        echo "Copilot enabled"
+    endif
+endfunction
+
+" bind key to toggle function
+nnoremap <F2> :call ToggleCopilot()<CR>                 
+```
+
+#### VSCodium
+
+In VSCodium, you can press the small Copilot icon in the bottom right corner to enable/disable Copilot. I have not found a way to make it always disabled on startup, but you can at least disable it when you are not using it. The `POST` request will not be sent until you start writing in the file, so you can disable it before you start writing.
+
+![](./images/vscodium-copilot-icon-toggle-0.png)
+![](./images/vscodium-copilot-icon-toggle-1.png)
+
+or create a keybind to toggle Copilot on and off.
+
+![](./images/vscodium-keybind-copilot-toggle.png)
+
+### Copilot only enabled for specific file types
+
+You can also configure Copilot to only be enabled for specific file types.
+
+#### Vim
+
+This can be done by adding the following line to your `~/.vimrc`:
+
+```vim
+" only enabled on whitelisted file types
+let g:copilot_filetypes = {                                                                   
+  \ '*': v:false,
+  \ 'python': v:true,
+  \ 'css': v:true,
+  \ 'php': v:true,
+  \ 'perl': v:true,
+  \ 'markdown': v:true,
+  \ 'go': v:true,
+  \ 'html': v:true,
+  \ 'java': v:true,
+  \ 'javascript': v:true,
+  \ 'julia': v:true
+  \ }
+```
+
+This will only run Copilot for the specified file types, even if it is enabled.
+
+#### VSCodium
+
+This is where the settings in VSCodium cause a bit of a problem. There does not seem to be a way to create a whitelist of file types where Copilot should be enabled, and simultaneously use the `Copilot enable/disable` button.
+
+The setting to enable or disable Copilot is based on changing the setting for all file types (`*`). When it is set to `false`, Copilot is disabled for all file types. If there are any exceptions in the list of file types, the exceptions will have precedence. This means that if you have pressed your bound key to disable Copilot, Copilot is now disabled for all file types, but if you have an exception to have it enabled for Python, Copilot will still be enabled for Python files. If there had been a way to disable Copilot without changing the setting for all file types, this would have been a good way to only enable Copilot for specific file types.
+
+![](./images/vscodium-copilot-filetypes.png)
+
+There does seem to exist such a setting called `github.copilot.editor.enableAutoCompletions`, but I have not found a way to bind this to a key combination and make it toggle on and off. It is very likely that it is possible, but I simply do not know enough about VSCodium to do it. Using extensions you could probably create a macro that toggles this setting on and off, and bind that macro to a key combination, but that is outside the scope of this demo.
+
+![](./images/vscodium-copilot-enableAutoCompletions.png)
 
 
 
