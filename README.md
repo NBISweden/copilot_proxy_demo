@@ -98,8 +98,8 @@ nnoremap <F2> :call ToggleCopilot()<CR>
 
 In VSCodium, you can press the small Copilot icon in the bottom right corner to enable/disable Copilot. I have not found a way to make it always disabled on startup, but you can at least disable it when you are not using it. The `POST` request will not be sent until you start writing in the file, so you can disable it before you start writing.
 
-![](./images/vscodium-copilot-icon-toggle-0.png)
-![](./images/vscodium-copilot-icon-toggle-1.png)
+![](./images/vscodium-copilot-icon-toggle-0.png)  
+![](./images/vscodium-copilot-icon-toggle-1.png)  
 
 or create a keybind to toggle Copilot on and off.
 
@@ -130,7 +130,7 @@ let g:copilot_filetypes = {
   \ }
 ```
 
-This will only run Copilot for the specified file types, even if it is enabled.
+This sets Copilot to be disabled for all file types, except for the ones listed in the dictionary. You can add or remove file types as you see fit. Avoid settings file types like YAML, JSON, or any other file type that contains sensitive information. Note that some files, like `.env` files, are recognized as `sh` files.
 
 #### VSCodium
 
@@ -144,6 +144,14 @@ There does seem to exist such a setting called `github.copilot.editor.enableAuto
 
 ![](./images/vscodium-copilot-enableAutoCompletions.png)
 
+## VSCode vs VSCodium
 
+Not connected to Copilot as such, but it is worth mentioning that VSCodium is a version of Visual Studio Code without the Microsoft branding and telemetry. It is a community-driven, freely-licensed binary distribution of Microsoft’s editor. There is a stark difference in the amount of permissions that the two editors require when installing the Copilot extension. VSCodium requires significantly fewer permissions than VSCode, which is a good thing if you are concerned about privacy.
+
+VSCode permissions:
+![](./images/permissions-vscode.png)  
+
+VSCodium permissions:
+![](./images/permissions-vscodium.png)
 
 
