@@ -148,10 +148,10 @@ There does seem to exist such a setting called `github.copilot.editor.enableAuto
 
 Not connected to Copilot as such, but it is worth mentioning that VSCodium is a version of Visual Studio Code without the Microsoft branding and telemetry. It is a community-driven, freely-licensed binary distribution of Microsoft’s editor. There is a stark difference in the amount of permissions that the two editors require when installing the Copilot extension. VSCodium requires significantly fewer permissions than VSCode, which is a good thing if you are concerned about privacy.
 
-VSCode permissions:
+VSCode permissions:  
 ![](./images/permissions-vscode.png)  
 
-VSCodium permissions:
+VSCodium permissions:  
 ![](./images/permissions-vscodium.png)
 
 
